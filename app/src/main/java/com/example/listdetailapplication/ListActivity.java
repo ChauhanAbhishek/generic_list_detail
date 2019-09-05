@@ -37,9 +37,11 @@ public class ListActivity extends AppCompatActivity {
         component.injectHomeActivity(this);
 
         listViewModel = ViewModelProviders.of(this, providerFactory).get(ListViewModel.class);
+        listViewModel.checkReq();
 
 
         Log.d("check not null " , listAdapter + " ls");
         Log.d("check not null " , providerFactory + " ls");
     }
 }
+

@@ -28,6 +28,7 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 
@@ -140,10 +141,10 @@ public class NetworkModule {
     @ApplicationScope
     Retrofit retrofit(OkHttpClient okHttpClient, ObjectMapper objectMapper) {
         return new Retrofit.Builder()
-                .baseUrl("http://www.mocky.io/v2/")
-                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+                .baseUrl("http://www.omdbapi.com/")
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
