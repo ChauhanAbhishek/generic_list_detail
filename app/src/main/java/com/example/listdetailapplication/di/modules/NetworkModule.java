@@ -113,13 +113,14 @@ public class NetworkModule {
 
     @ApplicationScope
     @Provides
-    OkHttpClient okHttpClient(Cache cache,@Named ("offline") Interceptor offlineInterceptor,@Named ("online")Interceptor networkInterceptor,Context context) {
+    OkHttpClient okHttpClient(Cache cache,@Named ("offline") Interceptor offlineInterceptor,@Named ("online")Interceptor networkInterceptor,HttpLoggingInterceptor httpLoggingInterceptor,Context context) {
         return new OkHttpClient.Builder()
-                .addInterceptor(offlineInterceptor)
-                .addNetworkInterceptor(networkInterceptor)
+                .addNetworkInterceptor(httpLoggingInterceptor)
                 .cache(cache)
                 .build();
     }
+
+    //                .addInterceptor(offlineInterceptor) , ADD ONLINE INTERCEPTOR AS WELL IF U WANT TO USE OFFLINE FEATURE
 
     @Provides
     @ApplicationScope
