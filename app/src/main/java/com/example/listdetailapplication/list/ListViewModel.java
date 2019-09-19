@@ -12,6 +12,7 @@ import javax.inject.Inject;
 public class ListViewModel extends ViewModel {
 
     CommonRepository mCommonRepository;
+    public static final String QUERY_EXHAUSTED = "No more results.";
     @Inject
     public ListViewModel(CommonRepository repository)
     {

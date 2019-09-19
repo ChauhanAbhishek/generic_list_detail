@@ -10,8 +10,9 @@ import androidx.room.Room;
 
 import com.example.listdetailapplication.ApiService;
 import com.example.listdetailapplication.CommonRepository;
-import com.example.listdetailapplication.database.NoteDao;
-import com.example.listdetailapplication.database.NoteDatabase;
+import com.example.listdetailapplication.database.MovieDao;
+import com.example.listdetailapplication.database.MovieDatabase;
+
 import com.example.listdetailapplication.di.annotations.ApplicationScope;
 
 import javax.inject.Singleton;
@@ -19,31 +20,31 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-import static com.example.listdetailapplication.database.NoteDatabase.DATABASE_NAME;
+import static com.example.listdetailapplication.database.MovieDatabase.DATABASE_NAME;
 
 @Module
 public class RepositoryModule {
 
     @Provides
     @ApplicationScope
-    public CommonRepository repositoryModule(ApiService apiService,NoteDao noteDao)
+    public CommonRepository repositoryModule(ApiService apiService, MovieDao noteDao)
     {
         return new CommonRepository(apiService,noteDao);
     }
 
     @ApplicationScope
     @Provides
-    static NoteDatabase provideNoteDatabase(Context context){
+    static MovieDatabase provideNoteDatabase(Context context){
         return Room.databaseBuilder(
                 context,
-                NoteDatabase.class,
+                MovieDatabase.class,
                 DATABASE_NAME
         ).build();
     }
 
     @ApplicationScope
     @Provides
-    static NoteDao provideNoteDao(NoteDatabase noteDatabase){
-        return noteDatabase.getNoteDao();
+    static MovieDao provideNoteDao(MovieDatabase movieDatabase){
+        return movieDatabase.getMovieDao();
     }
 }

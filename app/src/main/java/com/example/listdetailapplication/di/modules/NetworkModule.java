@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.example.listdetailapplication.ApiService;
 import com.example.listdetailapplication.BuildConfig;
-import com.example.listdetailapplication.Utils;
+import com.example.listdetailapplication.utils.Utils;
 import com.example.listdetailapplication.di.annotations.ApplicationScope;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 
 @Module(includes = ApplicationContextModule.class)
