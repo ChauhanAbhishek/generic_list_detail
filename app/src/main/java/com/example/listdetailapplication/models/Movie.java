@@ -17,8 +17,8 @@ public class Movie {
 
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "movie_id")
-    private String movieId;
+    @ColumnInfo(name = "imdb_id")
+    private String imdbID;
 
     @ColumnInfo(name = "title")
     private String title;
@@ -39,14 +39,30 @@ public class Movie {
     private int timestamp;
 
 
-    @NonNull
-    public String getMovieId() {
-        return movieId;
-    }
+    // DETAIL PAGE
 
-    public void setMovieId(@NonNull String movieId) {
-        this.movieId = movieId;
-    }
+    @ColumnInfo(name = "meta_score")
+    private int metaScore;
+
+    @ColumnInfo(name = "imdb_rating")
+    private int imdbRating;
+
+    @ColumnInfo(name = "imdb_votes")
+    private int imdbVotes;
+
+    @ColumnInfo(name = "dvd")
+    private int dvd;
+
+    @ColumnInfo(name = "box_office")
+    private int boxOffice;
+
+    @ColumnInfo(name = "production")
+    private int production;
+
+    @ColumnInfo(name = "website")
+    private int website;
+
+
 
     public String getTitle() {
         return title;
@@ -96,8 +112,78 @@ public class Movie {
         this.timestamp = timestamp;
     }
 
-    public Movie(@NonNull String movieId, String title, String year, String imdb, String type, String poster, int timestamp) {
-        this.movieId = movieId;
+    @NonNull
+    public String getImdbID() {
+        return imdbID;
+    }
+
+    public void setImdbID(@NonNull String imdbID) {
+        this.imdbID = imdbID;
+    }
+
+    public int getMetaScore() {
+        return metaScore;
+    }
+
+    public void setMetaScore(int metaScore) {
+        this.metaScore = metaScore;
+    }
+
+    public int getImdbRating() {
+        return imdbRating;
+    }
+
+    public void setImdbRating(int imdbRating) {
+        this.imdbRating = imdbRating;
+    }
+
+    public int getImdbVotes() {
+        return imdbVotes;
+    }
+
+    public void setImdbVotes(int imdbVotes) {
+        this.imdbVotes = imdbVotes;
+    }
+
+    public int getDvd() {
+        return dvd;
+    }
+
+    public void setDvd(int dvd) {
+        this.dvd = dvd;
+    }
+
+    public int getBoxOffice() {
+        return boxOffice;
+    }
+
+    public void setBoxOffice(int boxOffice) {
+        this.boxOffice = boxOffice;
+    }
+
+    public int getProduction() {
+        return production;
+    }
+
+    public void setProduction(int production) {
+        this.production = production;
+    }
+
+    public int getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(int website) {
+        this.website = website;
+    }
+
+    public Movie()
+    {
+
+    }
+
+    public Movie(@NonNull String imdbId, String title, String year, String imdb, String type, String poster, int timestamp) {
+        this.imdbID = imdbId;
         this.title = title;
         this.year = year;
         this.imdb = imdb;

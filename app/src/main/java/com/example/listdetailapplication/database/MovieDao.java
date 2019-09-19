@@ -30,7 +30,7 @@ public interface MovieDao {
     @Query("Delete from movies")
     int deleteAllMovies();
 
-    @Query("SELECT * FROM movies WHERE movie_id = :movieId")
+    @Query("SELECT * FROM movies WHERE imdb_id = :movieId")
     LiveData<Movie> getMovie(String movieId);
 
     @Query("SELECT * FROM movies")
