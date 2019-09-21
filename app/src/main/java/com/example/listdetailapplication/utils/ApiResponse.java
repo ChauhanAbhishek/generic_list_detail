@@ -30,14 +30,14 @@ public class ApiResponse<T> {
 
                 if(((ListResponseApi) body).getResponse().equals("false")){
                     // query is exhausted
-                    return new ApiErrorResponse<>(QUERY_EXHAUSTED);
+                    return new ApiErrorResponse<>(((ListResponseApi) body).getError());
                 }
             }
 
             if(body instanceof DetailResponseApi){
                 if(((DetailResponseApi) body).getResponse().equals("false")){
                     // query is exhausted
-                    return new ApiErrorResponse<>(QUERY_EXHAUSTED);
+                    return new ApiErrorResponse<>(((ListResponseApi) body).getError());
                 }
             }
 
