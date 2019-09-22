@@ -22,6 +22,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import retrofit2.Response;
 
 public class CommonRepository {
@@ -106,10 +109,39 @@ public class CommonRepository {
                 Single<Response<ListResponseApi>> travelResponse;
                 travelResponse = mApiService.searchMovies("960d58e9",query,String.valueOf(pageNumber));
                 return LiveDataReactiveStreams.fromPublisher(travelResponse.subscribeOn(Schedulers.io())
+                        .onErrorReturn(new Function<Throwable, Response<ListResponseApi>>() {
+                            @Override
+                            public Response<ListResponseApi> apply(Throwable throwable) throws Exception {
+                                return Response.error(404, new ResponseBody() {
+                                    @Override
+                                    public MediaType contentType() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long contentLength() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public BufferedSource source() {
+                                        return null;
+                                    }
+                                });
+                            }
+                        })
                         .map(new Function<Response<ListResponseApi>,  ApiResponse<ListResponseApi>>() {
                             @Override
                             public ApiResponse<ListResponseApi> apply(Response<ListResponseApi> response) throws Exception {
-                                return apiResponse.create(response);
+                                if(response.isSuccessful())
+                                {
+                                    return apiResponse.create(response);
+                                }
+                                else
+                                {
+                                    return apiResponse.create(new Throwable(""));
+                                }
+
                             }
                         })
                         .subscribeOn(Schedulers.io())
