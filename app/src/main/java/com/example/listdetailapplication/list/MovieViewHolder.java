@@ -8,40 +8,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.listdetailapplication.R;
+import com.example.listdetailapplication.databinding.LayoutMovieListItemBinding;
 import com.example.listdetailapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    TextView imdb_id, title, year,type,imdb;
-    ImageView poster;
+    LayoutMovieListItemBinding layoutMovieListItemBinding;
     OnMovieListener onMovieListener;
     Picasso picasso;
 
-    public MovieViewHolder(@NonNull View itemView,
+    public MovieViewHolder(@NonNull LayoutMovieListItemBinding binding,
                             OnMovieListener onMovieListener, Picasso picasso) {
-        super(itemView);
+        super(binding.getRoot());
         this.onMovieListener = onMovieListener;
         this.picasso = picasso;
-
-
-        imdb_id = itemView.findViewById(R.id.imdb_id);
-        title = itemView.findViewById(R.id.title);
-        year = itemView.findViewById(R.id.year);
-        type = itemView.findViewById(R.id.type);
-        imdb = itemView.findViewById(R.id.imdb);
-        poster = itemView.findViewById(R.id.poster);
-
-
-        itemView.setOnClickListener(this);
+        layoutMovieListItemBinding = binding;
     }
 
     public void onBind(Movie movie){
-        imdb_id.setText(movie.getImdbID());
-        title.setText(movie.getTitle());
-        year.setText(movie.getYear());
-        type.setText(movie.getType());
-        imdb.setText(movie.getImdb());
+        layoutMovieListItemBinding.setMovieItem(movie);
+        picasso.load(movie.getPoster()).into(layoutMovieListItemBinding.poster);
 
     }
 

@@ -5,10 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.listdetailapplication.ListActivity;
 import com.example.listdetailapplication.R;
+import com.example.listdetailapplication.databinding.LayoutMovieListItemBinding;
 import com.example.listdetailapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -19,7 +21,7 @@ import javax.inject.Inject;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMovieListener {
 
-    private OnMovieListener activity;
+    private OnMovieListener onMovieListener;
     private Picasso picasso;
     private List<Movie> movieList;
 
@@ -29,7 +31,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Inject
     public ListAdapter(OnMovieListener onMovieListener,Picasso picasso) {
-        this.activity = onMovieListener;
+        this.onMovieListener = onMovieListener;
         this.picasso = picasso;
     }
 
@@ -51,8 +53,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         switch (i){
 
             case MOVIE_TYPE:{
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_movie_list_item, viewGroup, false);
-                return new MovieViewHolder(view, this, picasso);
+                LayoutMovieListItemBinding layoutMovieListItemBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_movie_list_item,
+                                viewGroup, false);
+                return new MovieViewHolder(layoutMovieListItemBinding, this, picasso);
             }
 
             case LOADING_TYPE:{
@@ -66,8 +70,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
 
             default:{
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_movie_list_item, viewGroup, false);
-                return new MovieViewHolder(view, this, picasso);
+                LayoutMovieListItemBinding layoutMovieListItemBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_movie_list_item,
+                                viewGroup, false);
+                return new MovieViewHolder(layoutMovieListItemBinding, this, picasso);
             }
         }
     }

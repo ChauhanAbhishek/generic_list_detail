@@ -9,12 +9,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.listdetailapplication.databinding.ActivityMainBinding;
 import com.example.listdetailapplication.di.component.DaggerListActivityComponent;
 import com.example.listdetailapplication.di.component.ListActivityComponent;
 import com.example.listdetailapplication.di.modules.ListActivityModule;
@@ -34,11 +36,12 @@ import static com.example.listdetailapplication.utils.Resource.Status.LOADING;
 
 public class ListActivity extends AppCompatActivity implements OnMovieListener {
 
-    @Inject
-    ListAdapter listAdapter;
 
     @Inject
     ViewModelProviderFactory providerFactory;
+
+    @Inject
+    ListAdapter listAdapter;
 
     ListViewModel listViewModel ;
     private SearchView mSearchView;
@@ -47,10 +50,11 @@ public class ListActivity extends AppCompatActivity implements OnMovieListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding  activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        activityMainBinding.setLifecycleOwner(this);
 
-        mRecyclerView = findViewById(R.id.recipe_list);
-        mSearchView = findViewById(R.id.search_view);
+        mRecyclerView = activityMainBinding.content.recipeList;
+        mSearchView = activityMainBinding.searchView;
 
         ListActivityComponent component = DaggerListActivityComponent.builder()
                 .listActivityModule(new ListActivityModule(this))
