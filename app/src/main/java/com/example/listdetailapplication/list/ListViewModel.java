@@ -18,13 +18,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
 public class ListViewModel extends ViewModel {
 
     CommonRepository mCommonRepository;
     public static final String QUERY_EXHAUSTED = "No more results.";
     private static final String TAG = "RecipeListViewModel";
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
+
     private MutableLiveData<Movie> openThisMovie = new MediatorLiveData<>();
+    private MutableLiveData<Integer> updatePosition = new MutableLiveData<>();
+
 
     private boolean isQueryExhausted;
     private boolean isPerformingQuery;
@@ -49,6 +56,40 @@ public class ListViewModel extends ViewModel {
             isColdStart=false;
         }
     }
+
+    public MutableLiveData<Integer> getUpdatePosition() {
+        return updatePosition;
+    }
+
+
+
+    public void bookmarkMovie(Movie movie, int position)
+    {
+        mCommonRepository.bookmarkMovie(movie).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(Integer response) {
+                        Log.d("cnrr",response+"");
+                        if(response>0)
+                        {
+                            movie.setBookmarked(movie.getBookmarked()==0?1:0);
+                            updatePosition.setValue(position);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("cnrr",e+"");
+
+                    }
+                });
+    }
+
+    public LiveData<List<Movie>> getAllBoomkarkedMovies() {
+        return mCommonRepository.getAllBoomkarkedMovies();
+    }
+
 
     public void openMovieDetail(Movie movie)
     {

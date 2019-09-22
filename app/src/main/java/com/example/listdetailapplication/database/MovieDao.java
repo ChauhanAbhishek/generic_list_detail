@@ -36,9 +36,16 @@ public interface MovieDao {
     @Query("SELECT * FROM movies")
     LiveData<List<Movie>> getAllMovies();
 
+    @Query("SELECT * FROM movies where bookmarked = 1")
+    LiveData<List<Movie>> getAllBookmarkedMovies();
+
     @Query("UPDATE movies SET meta_score = :metaScore, imdb_rating =:imdbRating,imdb_votes =  :imdbVotes, dvd = :dvd, box_office = :boxOffice, production = :production, website = :website , timestamp = :timestamp " +
             "WHERE imdb_id = :imdbId")
     int updateRecipe(String imdbId, String metaScore, String imdbRating, String imdbVotes, String dvd, String boxOffice, String production, String website,int timestamp);
+
+    @Query("UPDATE movies SET bookmarked = :bookmarked " +
+            "WHERE imdb_id = :imdbId")
+    Single<Integer> updateBookmark(String imdbId, int bookmarked);
 
 }
 

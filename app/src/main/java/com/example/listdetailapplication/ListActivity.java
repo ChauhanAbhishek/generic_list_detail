@@ -3,6 +3,7 @@ package com.example.listdetailapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.listdetailapplication.detail.DetailActivity;
 import com.example.listdetailapplication.di.component.DaggerListActivityComponent;
 import com.example.listdetailapplication.di.component.ListActivityComponent;
 import com.example.listdetailapplication.di.modules.ListActivityModule;
+import com.example.listdetailapplication.list.BookmarkAdapter;
 import com.example.listdetailapplication.list.ListAdapter;
 import com.example.listdetailapplication.list.ListViewModel;
 import com.example.listdetailapplication.list.OnMovieListener;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import dagger.multibindings.ElementsIntoSet;
 
 import static com.example.listdetailapplication.list.ListViewModel.QUERY_EXHAUSTED;
 import static com.example.listdetailapplication.utils.Resource.Status.LOADING;
@@ -45,9 +49,13 @@ public class ListActivity extends AppCompatActivity  {
     @Inject
     ListAdapter listAdapter;
 
+    @Inject
+    BookmarkAdapter bookmarkAdapter;
+
     ListViewModel listViewModel ;
     private SearchView mSearchView;
     private RecyclerView mRecyclerView;
+    private RecyclerView mBookmarkRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,7 @@ public class ListActivity extends AppCompatActivity  {
         activityMainBinding.setLifecycleOwner(this);
 
         mRecyclerView = activityMainBinding.content.recipeList;
+        mBookmarkRecyclerView = activityMainBinding.content.bookmarkList;
         mSearchView = activityMainBinding.searchView;
 
         ListActivityComponent component = DaggerListActivityComponent.builder()
@@ -96,6 +105,15 @@ public class ListActivity extends AppCompatActivity  {
         mRecyclerView.setAdapter(listAdapter);
     }
 
+    private void initBookmarkRecyclerView(){
+
+        mBookmarkRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+
+        listAdapter.setItemList(new ArrayList<>());
+        listAdapter.setViewModel(listViewModel);
+        mBookmarkRecyclerView.setAdapter(bookmarkAdapter);
+    }
+
     private void initSearchView(){
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -126,7 +144,7 @@ public class ListActivity extends AppCompatActivity  {
             @Override
             public void onChanged(@Nullable Resource<List<Movie>> listResource) {
                 if(listResource != null){
-                    Log.d(TAG, "onChanged: status: " + listResource.status);
+                    Log.d("cnrr", "onChanged: status: " + listResource.status);
 
                     if(listResource.data != null){
                         switch (listResource.status){
@@ -167,6 +185,23 @@ public class ListActivity extends AppCompatActivity  {
             }
         });
 
+        listViewModel.getAllBoomkarkedMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movieList) {
+                if(movieList != null){
+                    if(movieList.size()>0)
+                    {
+                        mBookmarkRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        mBookmarkRecyclerView.setVisibility(View.GONE);
+                    }
+                    bookmarkAdapter.setItemList(movieList);
+                }
+            }
+        });
+
         listViewModel.getOpenThisMovie().observe(this,new Observer<Movie>()
                 {
                     @Override
@@ -176,6 +211,14 @@ public class ListActivity extends AppCompatActivity  {
                         startActivity(i);
                     }
                 });
+
+            listViewModel.getUpdatePosition().observe(this,new Observer<Integer>()
+        {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                listAdapter.notifyItemChanged(integer);
+            }
+        });
 
     }
 }

@@ -29,6 +29,31 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     public void onBind(Movie movie){
         layoutMovieListItemBinding.setMovieItem(movie);
         picasso.load(movie.getPoster()).into(layoutMovieListItemBinding.poster);
+        if(movie.getBookmarked()==0)
+        {
+            layoutMovieListItemBinding.bookmarked.setImageResource(R.drawable.bookmark_unselected);
+        }
+        else
+        {
+            layoutMovieListItemBinding.bookmarked.setImageResource(R.drawable.bookmark_selected);
+        }
+
+        layoutMovieListItemBinding.bookmarked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if(movie.getBookmarked()==0)
+//                {
+//                    on
+//                }
+//                else
+//                {
+//
+//                }
+
+                onMovieListener.onMovieBookmarked(movie,getAdapterPosition());
+            }
+        });
+
         layoutMovieListItemBinding.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

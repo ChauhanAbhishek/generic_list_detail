@@ -53,6 +53,11 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         viewModel.openMovieDetail(movieList.get(position));
     }
 
+    @Override
+    public void onMovieBookmarked(Movie movie,int position) {
+        viewModel.bookmarkMovie(movie, position);
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

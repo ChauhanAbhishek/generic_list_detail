@@ -39,6 +39,9 @@ public class Movie implements Serializable  {
     @ColumnInfo(name = "timestamp")
     private int timestamp;
 
+    @ColumnInfo(name = "bookmarked")
+    private int bookmarked;
+
 
     // DETAIL PAGE
 
@@ -111,6 +114,14 @@ public class Movie implements Serializable  {
 
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(int bookmarked) {
+        this.bookmarked = bookmarked;
     }
 
     @NonNull

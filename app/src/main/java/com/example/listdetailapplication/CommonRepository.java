@@ -18,8 +18,13 @@ import com.example.listdetailapplication.utils.Resource;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -192,6 +197,11 @@ public class CommonRepository {
 
             }
 
+            public void bookmarkMovie(Movie movie)
+            {
+
+            }
+
             @Override
             protected boolean shouldClearData() {
                 return false;
@@ -249,6 +259,18 @@ public class CommonRepository {
                         .toFlowable());
             }
         }.getAsLiveData();
+    }
+
+    public LiveData<List<Movie>> getAllBoomkarkedMovies()
+    {
+        return mNoteDao.getAllBookmarkedMovies();
+    }
+
+    public Single<Integer> bookmarkMovie(Movie movie)
+    {
+        Log.d("cnrr","bookmark");
+
+        return mNoteDao.updateBookmark(movie.getImdbID(),movie.getBookmarked()==0?1:0);
     }
 
 
