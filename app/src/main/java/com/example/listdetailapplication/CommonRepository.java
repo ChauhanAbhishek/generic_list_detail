@@ -166,7 +166,8 @@ public class CommonRepository {
                 if(item.getImdbRating() != null){
                    // item.get().setTimestamp((int)(System.currentTimeMillis() / 1000));
                     Log.d("cnru","update");
-                    int u = mNoteDao.updateRecipe(item.getImdbID(),item.getMetascore(),item.getImdbRating(),item.getImdbVotes(),item.getDVD(),item.getBoxOffice(),item.getProduction(),item.getWebsite());
+
+                    int u = mNoteDao.updateRecipe(item.getImdbID(),item.getMetascore(),item.getImdbRating(),item.getImdbVotes(),item.getDVD(),item.getBoxOffice(),item.getProduction(),item.getWebsite(),(int)(System.currentTimeMillis() / 1000));
 
                     Log.d("cnru","update " + u);
 
