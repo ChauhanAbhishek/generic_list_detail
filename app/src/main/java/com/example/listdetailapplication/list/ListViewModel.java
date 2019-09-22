@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
@@ -23,6 +24,7 @@ public class ListViewModel extends ViewModel {
     public static final String QUERY_EXHAUSTED = "No more results.";
     private static final String TAG = "RecipeListViewModel";
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
+    private MutableLiveData<Movie> openThisMovie = new MediatorLiveData<>();
 
     private boolean isQueryExhausted;
     private boolean isPerformingQuery;
@@ -48,6 +50,18 @@ public class ListViewModel extends ViewModel {
         }
     }
 
+    public void openMovieDetail(Movie movie)
+    {
+        openThisMovie.setValue(movie);
+    }
+
+    public LiveData<Movie> getOpenThisMovie() {
+        return openThisMovie;
+    }
+
+    public void setOpenThisMovie(MutableLiveData<Movie> openThisMovie) {
+        this.openThisMovie = openThisMovie;
+    }
 
     public LiveData<Resource<List<Movie>>> getMovies(){
         return movies;

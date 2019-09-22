@@ -1,5 +1,6 @@
 package com.example.listdetailapplication;
 
+import com.example.listdetailapplication.detail.DetailResponseApi;
 import com.example.listdetailapplication.list.ListResponseApi;
 
 import io.reactivex.Single;
@@ -14,7 +15,7 @@ public interface ApiService {
                                                 @Query("page") String page);
 
     @GET(".")
-    Single<Response<ListResponseApi>> getMovieDetail(
+    Single<Response<DetailResponseApi>> getMovieDetail(
             @Query("apikey") String apikey,@Query("i") String i);
 
 

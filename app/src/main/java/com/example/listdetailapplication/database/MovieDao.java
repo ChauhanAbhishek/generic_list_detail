@@ -36,6 +36,10 @@ public interface MovieDao {
     @Query("SELECT * FROM movies")
     LiveData<List<Movie>> getAllMovies();
 
+    @Query("UPDATE movies SET meta_score = :metaScore, imdb_rating =:imdbRating,imdb_votes =  :imdbVotes, dvd = :dvd, box_office = :boxOffice, production = :production, website = :website " +
+            "WHERE imdb_id = :imdbId")
+    int updateRecipe(String imdbId, String metaScore, String imdbRating, String imdbVotes, String dvd, String boxOffice, String production, String website);
+
 }
 
 

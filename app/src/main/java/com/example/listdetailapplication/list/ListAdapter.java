@@ -1,5 +1,6 @@
 package com.example.listdetailapplication.list;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +22,18 @@ import javax.inject.Inject;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMovieListener {
 
-    private OnMovieListener onMovieListener;
+    private Context context;
     private Picasso picasso;
     private List<Movie> movieList;
+    ListViewModel viewModel;
 
     private static final int MOVIE_TYPE = 1;
     private static final int LOADING_TYPE = 2;
     private static final int EXHAUSTED_TYPE = 3;
 
     @Inject
-    public ListAdapter(OnMovieListener onMovieListener,Picasso picasso) {
-        this.onMovieListener = onMovieListener;
+    public ListAdapter(Context context, Picasso picasso) {
+        this.context = context;
         this.picasso = picasso;
     }
 
@@ -41,9 +43,14 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         notifyDataSetChanged();
     }
 
+    public void setViewModel(ListViewModel viewModel)
+    {
+        this.viewModel = viewModel;
+    }
+
     @Override
     public void onMovieClicked(int position) {
-
+        viewModel.openMovieDetail(movieList.get(position));
     }
 
     @NonNull

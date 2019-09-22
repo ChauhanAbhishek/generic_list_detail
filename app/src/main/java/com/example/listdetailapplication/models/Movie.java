@@ -10,10 +10,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 @Entity(tableName = "movies")
-public class Movie {
+public class Movie implements Serializable  {
 
     @PrimaryKey
     @NonNull
@@ -42,25 +43,25 @@ public class Movie {
     // DETAIL PAGE
 
     @ColumnInfo(name = "meta_score")
-    private int metaScore;
+    private String metaScore;
 
     @ColumnInfo(name = "imdb_rating")
-    private int imdbRating;
+    private String imdbRating;
 
     @ColumnInfo(name = "imdb_votes")
-    private int imdbVotes;
+    private String imdbVotes;
 
     @ColumnInfo(name = "dvd")
-    private int dvd;
+    private String dvd;
 
     @ColumnInfo(name = "box_office")
-    private int boxOffice;
+    private String boxOffice;
 
     @ColumnInfo(name = "production")
-    private int production;
+    private String production;
 
     @ColumnInfo(name = "website")
-    private int website;
+    private String website;
 
 
 
@@ -121,59 +122,59 @@ public class Movie {
         this.imdbID = imdbID;
     }
 
-    public int getMetaScore() {
+    public String getMetaScore() {
         return metaScore;
     }
 
-    public void setMetaScore(int metaScore) {
+    public void setMetaScore(String metaScore) {
         this.metaScore = metaScore;
     }
 
-    public int getImdbRating() {
+    public String getImdbRating() {
         return imdbRating;
     }
 
-    public void setImdbRating(int imdbRating) {
+    public void setImdbRating(String imdbRating) {
         this.imdbRating = imdbRating;
     }
 
-    public int getImdbVotes() {
+    public String getImdbVotes() {
         return imdbVotes;
     }
 
-    public void setImdbVotes(int imdbVotes) {
+    public void setImdbVotes(String imdbVotes) {
         this.imdbVotes = imdbVotes;
     }
 
-    public int getDvd() {
+    public String getDvd() {
         return dvd;
     }
 
-    public void setDvd(int dvd) {
+    public void setDvd(String dvd) {
         this.dvd = dvd;
     }
 
-    public int getBoxOffice() {
+    public String getBoxOffice() {
         return boxOffice;
     }
 
-    public void setBoxOffice(int boxOffice) {
+    public void setBoxOffice(String boxOffice) {
         this.boxOffice = boxOffice;
     }
 
-    public int getProduction() {
+    public String getProduction() {
         return production;
     }
 
-    public void setProduction(int production) {
+    public void setProduction(String production) {
         this.production = production;
     }
 
-    public int getWebsite() {
+    public String getWebsite() {
         return website;
     }
 
-    public void setWebsite(int website) {
+    public void setWebsite(String website) {
         this.website = website;
     }
 
@@ -191,6 +192,8 @@ public class Movie {
         this.poster = poster;
         this.timestamp = timestamp;
     }
+
+
 }
 
 

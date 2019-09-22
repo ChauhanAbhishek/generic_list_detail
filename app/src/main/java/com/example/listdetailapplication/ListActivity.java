@@ -1,5 +1,6 @@
 package com.example.listdetailapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.listdetailapplication.databinding.ActivityMainBinding;
+import com.example.listdetailapplication.detail.DetailActivity;
 import com.example.listdetailapplication.di.component.DaggerListActivityComponent;
 import com.example.listdetailapplication.di.component.ListActivityComponent;
 import com.example.listdetailapplication.di.modules.ListActivityModule;
@@ -34,7 +36,7 @@ import javax.inject.Inject;
 import static com.example.listdetailapplication.list.ListViewModel.QUERY_EXHAUSTED;
 import static com.example.listdetailapplication.utils.Resource.Status.LOADING;
 
-public class ListActivity extends AppCompatActivity implements OnMovieListener {
+public class ListActivity extends AppCompatActivity  {
 
 
     @Inject
@@ -73,10 +75,6 @@ public class ListActivity extends AppCompatActivity implements OnMovieListener {
 
     }
 
-    @Override
-    public void onMovieClicked(int position) {
-
-    }
 
     private void initRecyclerView(){
 
@@ -94,6 +92,7 @@ public class ListActivity extends AppCompatActivity implements OnMovieListener {
         });
 
         listAdapter.setItemList(new ArrayList<>());
+        listAdapter.setViewModel(listViewModel);
         mRecyclerView.setAdapter(listAdapter);
     }
 
@@ -167,6 +166,16 @@ public class ListActivity extends AppCompatActivity implements OnMovieListener {
                 }
             }
         });
+
+        listViewModel.getOpenThisMovie().observe(this,new Observer<Movie>()
+                {
+                    @Override
+                    public void onChanged(@Nullable Movie movie) {
+                        Intent i = new Intent(ListActivity.this, DetailActivity.class);
+                        i.putExtra("movie", movie);
+                        startActivity(i);
+                    }
+                });
 
     }
 }

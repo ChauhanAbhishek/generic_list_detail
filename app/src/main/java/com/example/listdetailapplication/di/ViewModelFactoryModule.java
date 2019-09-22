@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import com.example.listdetailapplication.ViewModelProviderFactory;
+import com.example.listdetailapplication.detail.DetailActivityViewModel;
 import com.example.listdetailapplication.list.ListViewModel;
 
 import dagger.Binds;
@@ -21,6 +22,11 @@ public abstract class ViewModelFactoryModule {
     @IntoMap
     @ViewModelKey(ListViewModel.class)
     public abstract ViewModel bindListViewModel(ListViewModel noteViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailActivityViewModel.class)
+    public abstract ViewModel bindDetailActivityViewModel(DetailActivityViewModel detailActivityViewModel);
 
 //    @Binds
 //    @IntoMap

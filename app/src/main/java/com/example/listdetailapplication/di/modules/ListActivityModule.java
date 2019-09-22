@@ -2,6 +2,8 @@ package com.example.listdetailapplication.di.modules;
 
 
 
+import android.content.Context;
+
 import com.example.listdetailapplication.ListActivity;
 import com.example.listdetailapplication.di.annotations.ListActivityScope;
 import com.example.listdetailapplication.list.OnMovieListener;
@@ -12,15 +14,15 @@ import dagger.Provides;
 @Module
 public class ListActivityModule {
 
-    private final OnMovieListener onMovieListener;
+    private final Context context;
 
-    public ListActivityModule(OnMovieListener onMovieListener) {
-        this.onMovieListener = onMovieListener;
+    public ListActivityModule(Context context) {
+        this.context = context;
     }
 
     @Provides
     @ListActivityScope
-    public OnMovieListener listActivity() {
-        return onMovieListener;
+    public Context listActivity() {
+        return context;
     }
 }

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.example.listdetailapplication.database.MovieDao;
+import com.example.listdetailapplication.detail.DetailResponseApi;
 import com.example.listdetailapplication.list.ListResponseApi;
 import com.example.listdetailapplication.list.Search;
 import com.example.listdetailapplication.models.Movie;
@@ -151,6 +152,100 @@ public class CommonRepository {
             @Override
             protected void clearData() {
                 mNoteDao.deleteAllMovies();
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<Movie>> searchMovieById(String movieId)
+    {
+        return new NetworkBoundResource<Movie, DetailResponseApi>(AppExecutors.getInstance()){
+            @Override
+            protected void saveCallResult(@NonNull DetailResponseApi item) {
+
+                // will be null if API key is expired
+                if(item.getImdbRating() != null){
+                   // item.get().setTimestamp((int)(System.currentTimeMillis() / 1000));
+                    Log.d("cnru","update");
+                    int u = mNoteDao.updateRecipe(item.getImdbID(),item.getMetascore(),item.getImdbRating(),item.getImdbVotes(),item.getDVD(),item.getBoxOffice(),item.getProduction(),item.getWebsite());
+
+                    Log.d("cnru","update " + u);
+
+
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable Movie data) {
+                if(data.getImdbRating()!=null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            protected void clearData() {
+
+            }
+
+            @Override
+            protected boolean shouldClearData() {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Movie> loadFromDb() {
+                return mNoteDao.getMovie(movieId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<DetailResponseApi>> createCall() {
+                final ApiResponse apiResponse = new ApiResponse();
+                Single<Response<DetailResponseApi>> movieResponse;
+                movieResponse = mApiService.getMovieDetail("960d58e9",movieId);
+                return LiveDataReactiveStreams.fromPublisher(movieResponse.subscribeOn(Schedulers.io())
+                        .onErrorReturn(new Function<Throwable, Response<DetailResponseApi>>() {
+                            @Override
+                            public Response<DetailResponseApi> apply(Throwable throwable) throws Exception {
+                                return Response.error(404, new ResponseBody() {
+                                    @Override
+                                    public MediaType contentType() {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public long contentLength() {
+                                        return 0;
+                                    }
+
+                                    @Override
+                                    public BufferedSource source() {
+                                        return null;
+                                    }
+                                });
+                            }
+                        })
+                        .map(new Function<Response<DetailResponseApi>,  ApiResponse<DetailResponseApi>>() {
+                            @Override
+                            public ApiResponse<DetailResponseApi> apply(Response<DetailResponseApi> response) throws Exception {
+                                if(response.isSuccessful())
+                                {
+                                    return apiResponse.create(response);
+                                }
+                                else
+                                {
+                                    return apiResponse.create(new Throwable(""));
+                                }
+
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .toFlowable());
             }
         }.getAsLiveData();
     }

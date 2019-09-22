@@ -12,7 +12,7 @@ import com.example.listdetailapplication.databinding.LayoutMovieListItemBinding;
 import com.example.listdetailapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
-public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class MovieViewHolder extends RecyclerView.ViewHolder {
 
     LayoutMovieListItemBinding layoutMovieListItemBinding;
     OnMovieListener onMovieListener;
@@ -29,13 +29,15 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public void onBind(Movie movie){
         layoutMovieListItemBinding.setMovieItem(movie);
         picasso.load(movie.getPoster()).into(layoutMovieListItemBinding.poster);
+        layoutMovieListItemBinding.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMovieListener.onMovieClicked(getAdapterPosition());
+            }
+        });
 
     }
 
-    @Override
-    public void onClick(View v) {
-        onMovieListener.onMovieClicked(getAdapterPosition());
-    }
 }
 
 
