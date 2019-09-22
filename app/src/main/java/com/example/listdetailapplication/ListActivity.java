@@ -59,6 +59,7 @@ public class ListActivity extends AppCompatActivity {
         component.injectHomeActivity(this);
 
         listViewModel = ViewModelProviders.of(this, providerFactory).get(ListViewModel.class);
+        listViewModel.init();
         //listViewModel.checkReq();
         initRecyclerView();
         initSearchView();
@@ -105,7 +106,7 @@ public class ListActivity extends AppCompatActivity {
     public void searchMovieApi(String s)
     {
         mRecyclerView.smoothScrollToPosition(0);
-        listViewModel.searchRecipesApi(s, 1);
+        listViewModel.searchRecipesApi(s, 1,false);
         mSearchView.clearFocus();
     }
 

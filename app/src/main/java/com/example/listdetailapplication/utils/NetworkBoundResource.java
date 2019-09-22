@@ -10,6 +10,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.listdetailapplication.models.Movie;
+
+import java.util.List;
+
 
 // CacheObject: Type for the Resource data. (database cache)
 // RequestObject: Type for the API response. (network request)
@@ -19,11 +23,9 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     private AppExecutors appExecutors;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();
-    private boolean isColdStart;
 
-    public NetworkBoundResource(AppExecutors appExecutors,boolean isColdStart) {
+    public NetworkBoundResource(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
-        this.isColdStart = isColdStart;
         init();
     }
 
@@ -36,11 +38,9 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
             }
         });
-        if(!isColdStart)
-        {
-            results.setValue((Resource<CacheObject>) Resource.loading(null));
-            clearData();
-        }
+
+        results.setValue((Resource<CacheObject>) Resource.loading(null));
+
 
         // observe LiveData source from local db
         final LiveData<CacheObject> dbSource = loadFromDb();
@@ -111,7 +111,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                         public void run() {
 
                             // save the response to the local db
-                            if(isColdStart)
+                            if(shouldClearData())
                             {
                                 clearData();
                             }
@@ -138,7 +138,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                     appExecutors.mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            if(isColdStart)
+                            if(shouldClearData())
                             {
                                 clearData();
                             }
@@ -197,11 +197,15 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     @NonNull @MainThread
     protected abstract LiveData<ApiResponse<RequestObject>> createCall();
 
+    protected abstract boolean shouldClearData();
+
     // Returns a LiveData object that represents the resource that's implemented
     // in the base class.
     public final LiveData<Resource<CacheObject>> getAsLiveData(){
         return results;
     };
+
+
 }
 
 

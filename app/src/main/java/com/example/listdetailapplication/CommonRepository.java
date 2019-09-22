@@ -39,7 +39,7 @@ public class CommonRepository {
 
     public LiveData<Resource<List<Movie>>> executeSearch(String query, int pageNumber, boolean isColdStart)
     {
-        return new NetworkBoundResource<List<Movie>, ListResponseApi>(AppExecutors.getInstance(),isColdStart){
+        return new NetworkBoundResource<List<Movie>, ListResponseApi>(AppExecutors.getInstance()){
 
             @Override
             protected void saveCallResult(@NonNull ListResponseApi item) {
@@ -81,6 +81,11 @@ public class CommonRepository {
 //                        index++;
                     //}
                 }
+            }
+
+            @Override
+            protected boolean shouldClearData() {
+                return  isColdStart || pageNumber==1;
             }
 
             @Override

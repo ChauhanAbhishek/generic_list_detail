@@ -39,6 +39,15 @@ public class ListViewModel extends ViewModel {
         mCommonRepository = repository;
     }
 
+    public void init()
+    {
+        if(isColdStart)
+        {
+            searchRecipesApi("friends",1, true);
+            isColdStart=false;
+        }
+    }
+
 
     public LiveData<Resource<List<Movie>>> getMovies(){
         return movies;
@@ -48,7 +57,7 @@ public class ListViewModel extends ViewModel {
         return pageNumber;
     }
 
-    public void searchRecipesApi(String query, int pageNumber){
+    public void searchRecipesApi(String query, int pageNumber, boolean isColdStart){
         if(!isPerformingQuery){
             if(pageNumber == 0){
                 pageNumber = 1;
@@ -57,10 +66,7 @@ public class ListViewModel extends ViewModel {
             this.query = query;
             isQueryExhausted = false;
             executeSearch(isColdStart);
-            if(isColdStart)
-            {
-                isColdStart=false;
-            }
+
         }
     }
 
