@@ -115,6 +115,10 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             {
                                 clearData();
                             }
+                            if(shouldUpdateData())
+                            {
+                                updateData();
+                            }
                             saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse)requestObjectApiResponse));
 
 
@@ -141,6 +145,10 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             if(shouldClearData())
                             {
                                 clearData();
+                            }
+                            if(shouldUpdateData())
+                            {
+                                updateData();
                             }
                             results.addSource(loadFromDb(), new Observer<CacheObject>() {
                                 @Override
@@ -198,6 +206,10 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     protected abstract LiveData<ApiResponse<RequestObject>> createCall();
 
     protected abstract boolean shouldClearData();
+
+    protected abstract void updateData();
+
+    protected abstract boolean shouldUpdateData();
 
     // Returns a LiveData object that represents the resource that's implemented
     // in the base class.

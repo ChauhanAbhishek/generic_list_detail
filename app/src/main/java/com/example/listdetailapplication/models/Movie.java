@@ -42,6 +42,9 @@ public class Movie implements Serializable  {
     @ColumnInfo(name = "bookmarked")
     private int bookmarked;
 
+    @ColumnInfo(name = "fresh_data")
+    private int freshData;
+
 
     // DETAIL PAGE
 
@@ -122,6 +125,14 @@ public class Movie implements Serializable  {
 
     public void setBookmarked(int bookmarked) {
         this.bookmarked = bookmarked;
+    }
+
+    public int getFreshData() {
+        return freshData;
+    }
+
+    public void setFreshData(int freshData) {
+        this.freshData = freshData;
     }
 
     @NonNull

@@ -22,18 +22,18 @@ public interface MovieDao {
 
 
     @Insert(onConflict = IGNORE)
-    long[] insertMovies(Movie... recipe);
+    long[] insertMovies(List<Movie> recipe);
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = IGNORE)
     void insertMovie(Movie recipe);
 
-    @Query("Delete from movies")
+    @Query("Delete from movies where bookmarked == 0")
     int deleteAllMovies();
 
     @Query("SELECT * FROM movies WHERE imdb_id = :movieId")
     LiveData<Movie> getMovie(String movieId);
 
-    @Query("SELECT * FROM movies")
+    @Query("SELECT * FROM movies where fresh_data = 1")
     LiveData<List<Movie>> getAllMovies();
 
     @Query("SELECT * FROM movies where bookmarked = 1")
@@ -46,6 +46,12 @@ public interface MovieDao {
     @Query("UPDATE movies SET bookmarked = :bookmarked " +
             "WHERE imdb_id = :imdbId")
     Single<Integer> updateBookmark(String imdbId, int bookmarked);
+
+    @Query("UPDATE movies SET fresh_data = 0 ")
+    void updateBookmarkToStaleData();
+
+    @Query("UPDATE movies SET fresh_data = 1 where imdb_id=:imdbId ")
+    void updateBookmarkToFreshData(String imdbId);
 
 }
 

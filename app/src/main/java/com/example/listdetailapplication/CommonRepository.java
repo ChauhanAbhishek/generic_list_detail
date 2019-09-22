@@ -16,6 +16,8 @@ import com.example.listdetailapplication.utils.AppExecutors;
 import com.example.listdetailapplication.utils.NetworkBoundResource;
 import com.example.listdetailapplication.utils.Resource;
 import androidx.lifecycle.LiveDataReactiveStreams;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -58,6 +60,9 @@ public class CommonRepository {
 
 //                    Search[] sea = (Search[])item.getSearch().toArray();
 
+                    ArrayList<Movie> movieArrayList = new ArrayList<>();
+
+
                     for(int i=0;i<item.getSearch().size();i++) {
                         Search search = item.getSearch().get(i);
                         Movie movie = new Movie();
@@ -66,30 +71,38 @@ public class CommonRepository {
                         movie.setPoster(search.getPoster());
                         movie.setType(search.getType());
                         movie.setYear(search.getYear());
+                        movie.setFreshData(1);
 
-                        mNoteDao.insertMovie(movie);
+                        movieArrayList.add(movie);
+//                        int insertStatus = mNoteDao.insertMovie(movie);
+//
+//                        if(insertStatus==-1)
+//                        {
+//                            mNoteDao.updateBookmarkToFreshData(movie.getImdbID());
+//                        }
 
                     }
 
 
-
-//                    int index = 0;
-//                    for(long rowid: mNoteDao.insertMovies((Movie[]) (item.getSearch().toArray(movies)))){
-//                        if(rowid == -1){
-                           // Log.d(TAG, "saveCallResult: CONFLICT... This recipe is already in the cache");
-                            // if the recipe already exists... I don't want to set the ingredients or timestamp b/c
-                            // they will be erased
-//                            recipeDao.updateRecipe(
-//                                    recipes[index].getRecipe_id(),
-//                                    recipes[index].getTitle(),
-//                                    recipes[index].getPublisher(),
-//                                    recipes[index].getImage_url(),
-//                                    recipes[index].getSocial_rank()
-//                            );
-//                        }
-//                        index++;
-                    //}
+                    int index=0;
+                    for(long rowid: mNoteDao.insertMovies(movieArrayList)){
+                        if(rowid==-1)
+                        {
+                            mNoteDao.updateBookmarkToFreshData(movieArrayList.get(index).getImdbID());
+                        }
+                        index++;
+                    }
                 }
+            }
+
+            @Override
+            protected boolean shouldUpdateData() {
+                return true;
+            }
+
+            @Override
+            protected void updateData() {
+                mNoteDao.updateBookmarkToStaleData();
             }
 
             @Override
@@ -178,6 +191,15 @@ public class CommonRepository {
 
 
                 }
+            }
+
+            @Override
+            protected boolean shouldUpdateData() {
+                return false;
+            }
+
+            @Override
+            protected void updateData() {
             }
 
             @Override
