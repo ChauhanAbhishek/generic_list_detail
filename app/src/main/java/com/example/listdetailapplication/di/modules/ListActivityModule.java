@@ -4,6 +4,7 @@ package com.example.listdetailapplication.di.modules;
 
 import com.example.listdetailapplication.ListActivity;
 import com.example.listdetailapplication.di.annotations.ListActivityScope;
+import com.example.listdetailapplication.list.OnMovieListener;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,15 +12,15 @@ import dagger.Provides;
 @Module
 public class ListActivityModule {
 
-    private final ListActivity listActivity;
+    private final OnMovieListener onMovieListener;
 
-    public ListActivityModule(ListActivity listActivity) {
-        this.listActivity = listActivity;
+    public ListActivityModule(OnMovieListener onMovieListener) {
+        this.onMovieListener = onMovieListener;
     }
 
     @Provides
     @ListActivityScope
-    public ListActivity listActivity() {
-        return listActivity;
+    public OnMovieListener listActivity() {
+        return onMovieListener;
     }
 }

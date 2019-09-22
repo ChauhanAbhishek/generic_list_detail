@@ -20,6 +20,7 @@ import com.example.listdetailapplication.di.component.ListActivityComponent;
 import com.example.listdetailapplication.di.modules.ListActivityModule;
 import com.example.listdetailapplication.list.ListAdapter;
 import com.example.listdetailapplication.list.ListViewModel;
+import com.example.listdetailapplication.list.OnMovieListener;
 import com.example.listdetailapplication.models.Movie;
 import com.example.listdetailapplication.utils.Resource;
 
@@ -31,7 +32,7 @@ import javax.inject.Inject;
 import static com.example.listdetailapplication.list.ListViewModel.QUERY_EXHAUSTED;
 import static com.example.listdetailapplication.utils.Resource.Status.LOADING;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements OnMovieListener {
 
     @Inject
     ListAdapter listAdapter;
@@ -65,6 +66,11 @@ public class ListActivity extends AppCompatActivity {
         initSearchView();
         subscribeObservers();
       //  setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+
+    }
+
+    @Override
+    public void onMovieClicked(int position) {
 
     }
 

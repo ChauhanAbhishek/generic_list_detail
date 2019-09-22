@@ -47,7 +47,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View v) {
-        onMovieListener.onMovieBookmarked(getAdapterPosition());
+        onMovieListener.onMovieClicked(getAdapterPosition());
     }
 }
 

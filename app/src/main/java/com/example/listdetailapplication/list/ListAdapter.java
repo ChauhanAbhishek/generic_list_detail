@@ -19,7 +19,7 @@ import javax.inject.Inject;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMovieListener {
 
-    private ListActivity activity;
+    private OnMovieListener activity;
     private Picasso picasso;
     private List<Movie> movieList;
 
@@ -28,8 +28,8 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private static final int EXHAUSTED_TYPE = 3;
 
     @Inject
-    public ListAdapter(ListActivity activity,Picasso picasso) {
-        this.activity = activity;
+    public ListAdapter(OnMovieListener onMovieListener,Picasso picasso) {
+        this.activity = onMovieListener;
         this.picasso = picasso;
     }
 
@@ -40,7 +40,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void onMovieBookmarked(int position) {
+    public void onMovieClicked(int position) {
 
     }
 
@@ -86,7 +86,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(movieList.get(position).getTitle().equals("LOADING...")){
             return LOADING_TYPE;
         }
-        else if(movieList.get(position).getTitle().equals("LOADING...")){
+        else if(movieList.get(position).getTitle().equals("EXHAUSTED...")){
             return EXHAUSTED_TYPE;
         }
         else{
