@@ -37,9 +37,9 @@ public class CommonRepository {
         mNoteDao = movieDao;
     }
 
-    public LiveData<Resource<List<Movie>>> executeSearch(String query, int pageNumber)
+    public LiveData<Resource<List<Movie>>> executeSearch(String query, int pageNumber, boolean isColdStart)
     {
-        return new NetworkBoundResource<List<Movie>, ListResponseApi>(AppExecutors.getInstance()){
+        return new NetworkBoundResource<List<Movie>, ListResponseApi>(AppExecutors.getInstance(),isColdStart){
 
             @Override
             protected void saveCallResult(@NonNull ListResponseApi item) {
@@ -109,6 +109,11 @@ public class CommonRepository {
                         })
                         .subscribeOn(Schedulers.io())
                         .toFlowable());
+            }
+
+            @Override
+            protected void clearData() {
+                mNoteDao.deleteAllMovies();
             }
         }.getAsLiveData();
     }

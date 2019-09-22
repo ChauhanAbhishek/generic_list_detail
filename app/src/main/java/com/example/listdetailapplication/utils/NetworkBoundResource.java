@@ -19,16 +19,28 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     private AppExecutors appExecutors;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();
+    private boolean isColdStart;
 
-    public NetworkBoundResource(AppExecutors appExecutors) {
+    public NetworkBoundResource(AppExecutors appExecutors,boolean isColdStart) {
         this.appExecutors = appExecutors;
+        this.isColdStart = isColdStart;
         init();
     }
 
     private void init(){
 
         // update LiveData for loading status
-        results.setValue((Resource<CacheObject>) Resource.loading(null));
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        if(!isColdStart)
+        {
+            results.setValue((Resource<CacheObject>) Resource.loading(null));
+            clearData();
+        }
 
         // observe LiveData source from local db
         final LiveData<CacheObject> dbSource = loadFromDb();
@@ -80,6 +92,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
         results.addSource(apiResponse, new Observer<ApiResponse<RequestObject>>() {
             @Override
             public void onChanged(@Nullable final ApiResponse<RequestObject> requestObjectApiResponse) {
+
                 results.removeSource(dbSource);
                 results.removeSource(apiResponse);
 
@@ -98,7 +111,13 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                         public void run() {
 
                             // save the response to the local db
+                            if(isColdStart)
+                            {
+                                clearData();
+                            }
                             saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse)requestObjectApiResponse));
+
+
 
                             appExecutors.mainThread().execute(new Runnable() {
                                 @Override
@@ -119,6 +138,10 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                     appExecutors.mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
+                            if(isColdStart)
+                            {
+                                clearData();
+                            }
                             results.addSource(loadFromDb(), new Observer<CacheObject>() {
                                 @Override
                                 public void onChanged(@Nullable CacheObject cacheObject) {
@@ -167,6 +190,8 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     // Called to get the cached data from the database.
     @NonNull @MainThread
     protected abstract LiveData<CacheObject> loadFromDb();
+
+    protected abstract void clearData();
 
     // Called to create the API call.
     @NonNull @MainThread

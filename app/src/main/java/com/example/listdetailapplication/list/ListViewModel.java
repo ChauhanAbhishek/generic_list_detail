@@ -30,6 +30,7 @@ public class ListViewModel extends ViewModel {
     private String query;
     private boolean cancelRequest;
     private long requestStartTime;
+    private boolean isColdStart=true;
 
     @Inject
     public ListViewModel(CommonRepository repository)
@@ -55,14 +56,18 @@ public class ListViewModel extends ViewModel {
             this.pageNumber = pageNumber;
             this.query = query;
             isQueryExhausted = false;
-            executeSearch();
+            executeSearch(isColdStart);
+            if(isColdStart)
+            {
+                isColdStart=false;
+            }
         }
     }
 
     public void searchNextPage(){
         if(!isQueryExhausted && !isPerformingQuery){
             pageNumber++;
-            executeSearch();
+            executeSearch(false);
         }
     }
 
@@ -75,11 +80,11 @@ public class ListViewModel extends ViewModel {
         }
     }
 
-    private void executeSearch(){
+    private void executeSearch(boolean isColdStart){
         requestStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
-        final LiveData<Resource<List<Movie>>> repositorySource = mCommonRepository.executeSearch(query, pageNumber);
+        final LiveData<Resource<List<Movie>>> repositorySource = mCommonRepository.executeSearch(query, pageNumber,isColdStart);
         movies.addSource(repositorySource, new Observer<Resource<List<Movie>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<Movie>> listResource) {

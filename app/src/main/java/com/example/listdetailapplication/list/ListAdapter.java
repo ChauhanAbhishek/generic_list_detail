@@ -36,6 +36,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public void setItemList(List<Movie> movieList)
     {
         this.movieList=movieList;
+        notifyDataSetChanged();
     }
 
     @Override
