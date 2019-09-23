@@ -97,7 +97,7 @@ public class CommonRepository {
 
             @Override
             protected boolean shouldUpdateData() {
-                return true;
+                return pageNumber==1;
             }
 
             @Override
@@ -107,6 +107,7 @@ public class CommonRepository {
 
             @Override
             protected boolean shouldClearData() {
+                Log.d("cnrl",isColdStart + " " + pageNumber);
                 return  isColdStart || pageNumber==1;
             }
 
@@ -169,6 +170,7 @@ public class CommonRepository {
 
             @Override
             protected void clearData() {
+                Log.d("cnrl","clearing data");
                 mNoteDao.deleteAllMovies();
             }
         }.getAsLiveData();

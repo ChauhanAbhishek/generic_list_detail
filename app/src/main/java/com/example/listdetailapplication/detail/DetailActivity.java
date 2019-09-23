@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.listdetailapplication.R;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -37,6 +38,9 @@ public class DetailActivity extends AppCompatActivity {
 
     @Inject
     ViewModelProviderFactory providerFactory;
+
+    @Inject
+    Picasso picasso;
 
     DetailActivityViewModel detailActivityViewModel;
 
@@ -46,11 +50,14 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         activityDetailBinding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
         activityDetailBinding.setLifecycleOwner(this);
+
+        Toolbar toolbar = activityDetailBinding.toolbar;
+        toolbar.setTitle("Detail");
+        setSupportActionBar(toolbar);
 
         progressBar = activityDetailBinding.contentContainer.progressBar;
 
@@ -130,6 +137,8 @@ public class DetailActivity extends AppCompatActivity {
         activityDetailBinding.contentContainer.year.setText(movie.getYear());
         activityDetailBinding.contentContainer.imdb.setText(movie.getImdb());
         activityDetailBinding.contentContainer.type.setText(movie.getType());
+
+        picasso.load(movie.getPoster()).into(activityDetailBinding.contentContainer.poster);
 
         if(movie.getImdbRating()!=null)
         {

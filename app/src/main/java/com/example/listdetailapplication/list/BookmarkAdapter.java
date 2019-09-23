@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.listdetailapplication.ListActivity;
 import com.example.listdetailapplication.R;
+import com.example.listdetailapplication.databinding.LayoutBookmarkItemBinding;
 import com.example.listdetailapplication.databinding.LayoutMovieListItemBinding;
+import com.example.listdetailapplication.detail.BookmarkViewHolder;
 import com.example.listdetailapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +55,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onMovieBookmarked(Movie movie,int position) {
+        viewModel.bookmarkMovie(movie, position);
 
     }
 
@@ -63,19 +66,19 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (i){
 
             case MOVIE_TYPE:{
-                LayoutMovieListItemBinding layoutMovieListItemBinding = DataBindingUtil
-                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_movie_list_item,
+                LayoutBookmarkItemBinding layoutBookmarkItemBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_bookmark_item,
                                 viewGroup, false);
-                return new MovieViewHolder(layoutMovieListItemBinding, this, picasso);
+                return new BookmarkViewHolder(layoutBookmarkItemBinding, this, picasso);
             }
 
 
 
             default:{
-                LayoutMovieListItemBinding layoutMovieListItemBinding = DataBindingUtil
-                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_movie_list_item,
+                LayoutBookmarkItemBinding layoutBookmarkItemBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_bookmark_item,
                                 viewGroup, false);
-                return new MovieViewHolder(layoutMovieListItemBinding, this, picasso);
+                return new BookmarkViewHolder(layoutBookmarkItemBinding, this, picasso);
             }
         }
     }
@@ -84,7 +87,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = getItemViewType(i);
         if(itemViewType == MOVIE_TYPE){
-            ((MovieViewHolder)viewHolder).onBind(movieList.get(i));
+            ((BookmarkViewHolder)viewHolder).onBind(movieList.get(i));
         }
     }
 

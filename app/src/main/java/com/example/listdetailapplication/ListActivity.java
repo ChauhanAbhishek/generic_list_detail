@@ -66,6 +66,7 @@ public class ListActivity extends AppCompatActivity  {
         mRecyclerView = activityMainBinding.content.recipeList;
         mBookmarkRecyclerView = activityMainBinding.content.bookmarkList;
         mSearchView = activityMainBinding.searchView;
+        activityMainBinding.toolbar.setTitle("Movies");
 
         ListActivityComponent component = DaggerListActivityComponent.builder()
                 .listActivityModule(new ListActivityModule(this))
@@ -78,6 +79,7 @@ public class ListActivity extends AppCompatActivity  {
         listViewModel.init();
         //listViewModel.checkReq();
         initRecyclerView();
+        initBookmarkRecyclerView();
         initSearchView();
         subscribeObservers();
       //  setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
@@ -107,10 +109,10 @@ public class ListActivity extends AppCompatActivity  {
 
     private void initBookmarkRecyclerView(){
 
-        mBookmarkRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        mBookmarkRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        listAdapter.setItemList(new ArrayList<>());
-        listAdapter.setViewModel(listViewModel);
+        bookmarkAdapter.setItemList(new ArrayList<>());
+        bookmarkAdapter.setViewModel(listViewModel);
         mBookmarkRecyclerView.setAdapter(bookmarkAdapter);
     }
 

@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_marginTop="56dp"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:id="@+id/bookmark_list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -19,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recipe_list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+       >
 
     </androidx.recyclerview.widget.RecyclerView>
 
