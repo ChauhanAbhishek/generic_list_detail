@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.listdetailapplication.ListActivity;
@@ -24,7 +25,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     private Context context;
     private Picasso picasso;
-    private List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
     ListViewModel viewModel;
 
     private static final int MOVIE_TYPE = 1;
@@ -39,8 +40,16 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     public void setItemList(List<Movie> movieList)
     {
-        this.movieList=movieList;
-        notifyDataSetChanged();
+//        this.movieList=movieList;
+//        notifyDataSetChanged();
+
+        List<Movie> oldList = this.movieList;
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new MovieItemDiffCallback(oldList,movieList));
+
+        this.movieList = movieList;
+
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public void setViewModel(ListViewModel viewModel)
@@ -180,6 +189,51 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         }
         return false;
+    }
+
+    class MovieItemDiffCallback extends DiffUtil.Callback
+    {
+
+        List<Movie> oldMovieList;
+        List<Movie> newMovieList;
+
+        public MovieItemDiffCallback(List<Movie> oldMovieList, List<Movie> newMovieList)
+        {
+            this.oldMovieList = oldMovieList;
+            this.newMovieList = newMovieList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldMovieList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newMovieList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            if(oldMovieList.get(oldItemPosition).getImdbID()==null)
+            {
+                return false;
+            }
+
+            if(oldMovieList.get(oldItemPosition).getImdbID().equals(newMovieList.get(oldItemPosition).getImdbID()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldMovieList.get(oldItemPosition).equals(newMovieList.get(oldItemPosition));
+        }
     }
 
 }

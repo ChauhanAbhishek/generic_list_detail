@@ -12,6 +12,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Entity(tableName = "movies")
 public class Movie implements Serializable  {
@@ -215,7 +216,33 @@ public class Movie implements Serializable  {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return timestamp == movie.timestamp &&
+                bookmarked == movie.bookmarked &&
+                freshData == movie.freshData &&
+                imdbID.equals(movie.imdbID) &&
+                Objects.equals(title, movie.title) &&
+                Objects.equals(year, movie.year) &&
+                Objects.equals(imdb, movie.imdb) &&
+                Objects.equals(type, movie.type) &&
+                Objects.equals(poster, movie.poster) &&
+                Objects.equals(metaScore, movie.metaScore) &&
+                Objects.equals(imdbRating, movie.imdbRating) &&
+                Objects.equals(imdbVotes, movie.imdbVotes) &&
+                Objects.equals(dvd, movie.dvd) &&
+                Objects.equals(boxOffice, movie.boxOffice) &&
+                Objects.equals(production, movie.production) &&
+                Objects.equals(website, movie.website);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(imdbID, title, year, imdb, type, poster, timestamp, bookmarked, freshData, metaScore, imdbRating, imdbVotes, dvd, boxOffice, production, website);
+    }
 }
 
 
