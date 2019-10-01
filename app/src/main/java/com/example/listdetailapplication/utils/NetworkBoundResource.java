@@ -129,6 +129,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                                     results.addSource(loadFromDb(), new Observer<CacheObject>() {
                                         @Override
                                         public void onChanged(@Nullable CacheObject cacheObject) {
+                                            Log.d("cnrx","change hua");
                                             setValue(Resource.success(cacheObject));
                                         }
                                     });

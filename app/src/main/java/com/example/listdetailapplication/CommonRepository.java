@@ -290,6 +290,11 @@ public class CommonRepository {
         return mNoteDao.getAllBookmarkedMovies();
     }
 
+    public LiveData<List<Movie>> getAllMovies()
+    {
+        return mNoteDao.getAllMovies();
+    }
+
     public Single<Integer> bookmarkMovie(Movie movie)
     {
         Log.d("cnrr","bookmark");

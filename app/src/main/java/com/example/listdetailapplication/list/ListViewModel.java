@@ -57,6 +57,11 @@ public class ListViewModel extends ViewModel {
         }
     }
 
+    public LiveData<List<Movie>> getAllMovies()
+    {
+        return mCommonRepository.getAllMovies();
+    }
+
     public MutableLiveData<Integer> getUpdatePosition() {
         return updatePosition;
     }
@@ -73,8 +78,8 @@ public class ListViewModel extends ViewModel {
                         Log.d("cnrr",response+"");
                         if(response>0)
                         {
-                            movie.setBookmarked(movie.getBookmarked()==0?1:0);
-                            updatePosition.setValue(position);
+                           // movie.setBookmarked(movie.getBookmarked()==0?1:0);
+                            //updatePosition.setValue(position);
                         }
                     }
 
@@ -141,11 +146,18 @@ public class ListViewModel extends ViewModel {
         }
     }
 
+    LiveData<Resource<List<Movie>>> repositorySource ;
+
+
     private void executeSearch(boolean isColdStart){
         requestStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
-        final LiveData<Resource<List<Movie>>> repositorySource = mCommonRepository.executeSearch(query, pageNumber,isColdStart);
+        if(repositorySource!=null)
+        {
+            movies.removeSource(repositorySource);
+        }
+        repositorySource = mCommonRepository.executeSearch(query, pageNumber,isColdStart);
         movies.addSource(repositorySource, new Observer<Resource<List<Movie>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<Movie>> listResource) {
@@ -170,7 +182,7 @@ public class ListViewModel extends ViewModel {
                                     isQueryExhausted = true;
                                 }
                             }
-                            movies.removeSource(repositorySource);
+                            //movies.removeSource(repositorySource);
                         }
                         else if(listResource.status == Resource.Status.ERROR){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
@@ -178,16 +190,16 @@ public class ListViewModel extends ViewModel {
                             if(listResource.message.equals(QUERY_EXHAUSTED)){
                                 isQueryExhausted = true;
                             }
-                            movies.removeSource(repositorySource);
+                            //movies.removeSource(repositorySource);
                         }
                         movies.setValue(listResource);
                     }
                     else{
-                        movies.removeSource(repositorySource);
+                        //movies.removeSource(repositorySource);
                     }
                 }
                 else{
-                    movies.removeSource(repositorySource);
+                    //movies.removeSource(repositorySource);
                 }
             }
         });

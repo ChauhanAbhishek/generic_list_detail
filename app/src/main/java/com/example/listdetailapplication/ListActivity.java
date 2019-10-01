@@ -222,6 +222,14 @@ public class ListActivity extends AppCompatActivity  {
             }
         });
 
+            listViewModel.getAllMovies().observe(this,new Observer<List<Movie>>()
+            {
+                @Override
+                public void onChanged(@Nullable List<Movie> movies) {
+                   Log.d("cnrx","change fir se hua");
+                }
+            });
+
     }
 }
 
